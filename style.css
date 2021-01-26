@@ -1,0 +1,14 @@
+.gridBox{
+    width: 575px;
+    height: 575px;
+    background: aquamarine;
+    display: flex;
+    align-items: center;
+}
+
+.tableProp{
+    width: 100%;
+    height: 100%;
+    background: rgb(255, 163, 127);
+    border:1px solid black;
+}
