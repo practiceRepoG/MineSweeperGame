@@ -9,13 +9,14 @@
 </head>
 
 <body>
-    <div>
-        <div  id="gridBox" class="gridBox"></div>
-        <hr>
-        Rows : <input type="number" id="rowInput"><br><br>
-        Column : <input type="number" id="colInput"><br><br>
-        Bomb : <input type="number" id="bomb"><br><br>
-        <button id="startBtn" onclick="initialiseGrid()">Create</button>
+    <div class="mainContainer">
+        <div id="gridBox" class="gridBox"></div>
+        <div style="margin-left: 15px;">
+            Rows : <input type="number" id="rowInput"><br><br>
+            Column : <input type="number" id="colInput"><br><br>
+            Bomb : <input type="number" id="bomb"><br><br>
+            <button id="startBtn" onclick="initialiseGrid()">Create</button>
+        </div>
     </div>
     <script src="index.js"></script>
 </body>

@@ -1,3 +1,6 @@
+.mainContainer{
+    display: flex;
+}
 .gridBox{
     width: 575px;
     height: 575px;
