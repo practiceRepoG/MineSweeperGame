@@ -71,27 +71,29 @@ function cellClicked(e) {
     if (myGrid[idInfo[2]].cellVal !== "bomb" && myGrid[idInfo[2]].cellClicked !== true) {
         document.getElementById(e.target.id).style.background = "green";
         myGrid[idInfo[2]].cellClicked = true;
-        // document.getElementById(e.target.id).innerText = checkAdjCells(idInfo[2]);
         checkAdjCells(idInfo[2]);
     }
-    else if(myGrid[idInfo[2]].cellVal === "bomb"){
+    else if (myGrid[idInfo[2]].cellVal === "bomb") {
         document.getElementById("gridBox").innerHTML = "<h2>You Lost..!!</h2>";
         document.getElementById("startBtn").style.disable = true;
+    }
+    else if(myGrid[idInfo[2]].cellClicked === true){
+        document.getElementById(`${myGrid[idInfo[2]].cellXPos}-${myGrid[idInfo[2]].cellYPos}-${idInfo[2]}`).style.background = "green";
     }
 }
 
 function checkAdjCells(pos) {
-        let cellXPos = myGrid[pos].cellXPos;
-        let cellYPos = myGrid[pos].cellYPos;
-        let tmpX, tmpY;
-        console.log(cellXPos + adj[0][0]);
-        for (let i = 0; i < adj.length; i++) {
-            tmpX = cellXPos + adj[i][0];
-            tmpY = cellYPos + adj[i][1];
-            if (tmpX < gridColBkp && tmpX >= 0 && tmpY < gridColBkp && tmpY >= 0)
-                tmpAdj.push([tmpX, tmpY]);
-        }
-     countTheBomb(tmpAdj, pos);
+    let cellXPos = myGrid[pos].cellXPos;
+    let cellYPos = myGrid[pos].cellYPos;
+    let tmpX, tmpY;
+    console.log(cellXPos + adj[0][0]);
+    for (let i = 0; i < adj.length; i++) {
+        tmpX = cellXPos + adj[i][0];
+        tmpY = cellYPos + adj[i][1];
+        if (tmpX < gridColBkp && tmpX >= 0 && tmpY < gridColBkp && tmpY >= 0)
+            tmpAdj.push([tmpX, tmpY]);
+    }
+    countTheBomb(tmpAdj, pos);
 }
 
 function countTheBomb(tmpAdjs, pos) {
@@ -101,12 +103,12 @@ function countTheBomb(tmpAdjs, pos) {
             if (myGrid[i].cellXPos === tmpAdjs[j][0] && myGrid[i].cellYPos === tmpAdjs[j][1]) {
                 if (myGrid[i].cellVal === "bomb")
                     count++;
-                if(myGrid[i].cellClicked!== true && myGrid[i].cellBmbCount===0)
+                if (myGrid[i].cellClicked !== true && myGrid[i].cellBmbCount === 0 && count === 0)
                     nextPos.push(i);
-                if(myGrid[i].cellClicked=== true){
+                if (myGrid[i].cellClicked === true) {
                     document.getElementById(`${myGrid[i].cellXPos}-${myGrid[i].cellYPos}-${i}`).style.background = "green";
-                    if(myGrid[i].cellBmbCount>0)
-                        document.getElementById(`${myGrid[i].cellXPos}-${myGrid[i].cellYPos}-${i}`).innerText = myGrid[i].countTheBomb.toString();
+                    if (myGrid[i].cellBmbCount > 0)
+                        document.getElementById(`${myGrid[i].cellXPos}-${myGrid[i].cellYPos}-${i}`).innerText = myGrid[i].cellBmbCount.toString();
                 }
             }
         }
@@ -115,16 +117,16 @@ function countTheBomb(tmpAdjs, pos) {
         tmpAdj = [];
         myGrid[pos].cellBmbCount = count;
         document.getElementById(`${myGrid[pos].cellXPos}-${myGrid[pos].cellYPos}-${pos}`).style.background = "green";
-        document.getElementById(`${myGrid[pos].cellXPos}-${myGrid[pos].cellYPos}-${pos}`).innerText = count;
+        document.getElementById(`${myGrid[pos].cellXPos}-${myGrid[pos].cellYPos}-${pos}`).innerText = count.toString();
         return;
     }
     else {
         nextPos = [...new Set(nextPos)];
         while (nextPos.length) {
             tmpAdj = [];
-            if(myGrid[nextPos[nextPos.length - 1]].cellClicked !== true){
-                myGrid[nextPos[nextPos.length - 1]].cellClicked = true;
-                let p = nextPos.shift();
+            let p = nextPos.shift();
+            if (myGrid[p].cellClicked !== true) {
+                myGrid[p].cellClicked = true;
                 checkAdjCells(p);
             }
         }
