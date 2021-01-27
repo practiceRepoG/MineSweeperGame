@@ -41,7 +41,7 @@ function initialiseGrid() {
 //Assigning boms randomly as per user input
 function assignBombRandomly(bombCount) {
     let randomeCell;
-    let forRandom = gridColBkp*2;
+    let forRandom = (gridColBkp*gridRowBkp)-1;
     for (let i = 0; i < bombCount; i++) {
         randomeCell = Math.floor(Math.random() * forRandom);
         if(myGrid[randomeCell].cellVal==="clear")
@@ -49,7 +49,7 @@ function assignBombRandomly(bombCount) {
         else i--;
     }
     console.log(myGrid);
-    document.getElementById("infoP").innerText = `Number of bombs will be ${bombCount}`;
+    document.getElementById("infoP").innerText = `*Number of bombs will be ${bombCount}`;
     updateDiv();
 }
 
@@ -59,7 +59,7 @@ function updateDiv() {
     while (i < gridRowBkp) {
         str += "<tr>";
         while (j < gridColBkp) {
-            str += `<th id="${i}-${myGrid[j].cellYPos}-${k}" style="height:100px;width:100px"></th>`;
+            str += `<th id="${i}-${myGrid[j].cellYPos}-${k}" style="height:50px;width:50px"></th>`;
             j++; k++;
         }
         str += "</tr>";
@@ -77,7 +77,7 @@ function cellClicked(e) {
     nextPos = [];
     let idInfo = e.target.id.toString().split("-");
     if (myGrid[idInfo[2]].cellVal !== "bomb" && myGrid[idInfo[2]].cellClicked !== true) {
-        document.getElementById(e.target.id).style.background = "green";
+        document.getElementById(e.target.id).style.background = "rgb(153, 255, 204)";
         myGrid[idInfo[2]].cellClicked = true;
         checkAdjCells(idInfo[2]);
     }
@@ -86,8 +86,9 @@ function cellClicked(e) {
         document.getElementById("startBtn").disabled = true;
     }
     else if(myGrid[idInfo[2]].cellClicked === true){
-        document.getElementById(`${myGrid[idInfo[2]].cellXPos}-${myGrid[idInfo[2]].cellYPos}-${idInfo[2]}`).style.background = "green";
+        document.getElementById(`${myGrid[idInfo[2]].cellXPos}-${myGrid[idInfo[2]].cellYPos}-${idInfo[2]}`).style.background = "rgb(153, 255, 204)";
     }
+    checkForWin();
 }
 
 //Check next adj cells
@@ -115,7 +116,7 @@ function countTheBomb(tmpAdjs, pos) {
                 if (myGrid[i].cellClicked !== true && myGrid[i].cellBmbCount === 0 && count === 0)
                     nextPos.push(i);
                 if (myGrid[i].cellClicked === true) {
-                    document.getElementById(`${myGrid[i].cellXPos}-${myGrid[i].cellYPos}-${i}`).style.background = "green";
+                    document.getElementById(`${myGrid[i].cellXPos}-${myGrid[i].cellYPos}-${i}`).style.background = "rgb(153, 255, 204)";
                     if (myGrid[i].cellBmbCount > 0)
                         document.getElementById(`${myGrid[i].cellXPos}-${myGrid[i].cellYPos}-${i}`).innerText = myGrid[i].cellBmbCount.toString();
                 }
@@ -125,7 +126,7 @@ function countTheBomb(tmpAdjs, pos) {
     if (count > 0) {
         tmpAdj = [];
         myGrid[pos].cellBmbCount = count;
-        document.getElementById(`${myGrid[pos].cellXPos}-${myGrid[pos].cellYPos}-${pos}`).style.background = "green";
+        document.getElementById(`${myGrid[pos].cellXPos}-${myGrid[pos].cellYPos}-${pos}`).style.background = "rgb(153, 255, 204)";
         document.getElementById(`${myGrid[pos].cellXPos}-${myGrid[pos].cellYPos}-${pos}`).innerText = count.toString();
         return;
     }
@@ -139,5 +140,17 @@ function countTheBomb(tmpAdjs, pos) {
                 checkAdjCells(p); //recursively calls the function to decide cell needs to be revealed or not
             }
         }
+    }
+}
+//On each click check for win
+function checkForWin(){
+    let leftOtBox=0;
+    for(let i=0; i<myGrid.length; i++){
+        if(myGrid[i].cellClicked === false)
+            leftOtBox++;
+    }
+    if(leftOtBox === gridRowBkp){
+        document.getElementById("gridBox").innerHTML = "<h2>You Win</h2>";
+        document.getElementById("startBtn").disabled = true;
     }
 }
