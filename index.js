@@ -10,7 +10,7 @@ class CellState {
     }
 }
 
-let gameRules = `<h2>GAME RULES</h2><br>
+let gameRules = `<h2>GAME RULES</h2>
                  <h4>*Grid rows and coloumn should be >3 and <=10</h4><br>`;
 
 //Global var for refrence
@@ -82,7 +82,9 @@ function cellClicked(e) {
         checkAdjCells(idInfo[2]);
     }
     else if (myGrid[idInfo[2]].cellVal === "bomb") {
-        document.getElementById("gridBox").innerHTML = "<h2>You Lost..!!</h2>";
+        document.getElementById("gridBox").innerHTML = "";
+        document.getElementById("gridBox").style.backgroundImage = "url(GO1.jpg)";
+        document.getElementById("gridBox").style.backgroundSize = "cover";
         document.getElementById("startBtn").disabled = true;
     }
     else if(myGrid[idInfo[2]].cellClicked === true){
@@ -150,7 +152,11 @@ function checkForWin(){
             leftOtBox++;
     }
     if(leftOtBox === gridRowBkp){
-        document.getElementById("gridBox").innerHTML = "<h2>You Win</h2>";
+        document.getElementById("gridBox").innerHTML = "";
+        document.getElementById("gridBox").style.backgroundImage = "url(win.png)";
+        document.getElementById("gridBox").style.backgroundRepeat = "no-repeat";
+        document.getElementById("gridBox").style.backgroundSize = "800px";
+        document.getElementById("gridBox").style.backgroundColor = "black";
         document.getElementById("startBtn").disabled = true;
     }
 }
