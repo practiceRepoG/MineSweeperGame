@@ -11,8 +11,7 @@ class CellState {
 }
 
 let gameRules = `<h2>GAME RULES</h2><br>
-                 <h4>*Grid rows and coloumn should be >=3 and <=10</h4><br>
-                 <h4>*Bombs count should be atleast 1 and less than total number of cells in grid</h4>`;
+                 <h4>*Grid rows and coloumn should be >3 and <=10</h4><br>`;
 
 //Global var for refrence
 let myGrid, gridRowBkp = 0, gridColBkp = 0;
@@ -20,12 +19,11 @@ let myGrid, gridRowBkp = 0, gridColBkp = 0;
 //Initialise grid with given rowsa and coloumn
 function initialiseGrid() {
     let gridRow = document.getElementById("rowInput").value;
-    gridRowBkp = gridRow;
+    gridRowBkp = Number(gridRow);
     let gridCol = document.getElementById("colInput").value;
-    gridColBkp = gridCol;
-    let bombCount = document.getElementById("bomb").value;
-    let b = gridColBkp*gridRowBkp;
-    if(gridRowBkp>3 && gridRowBkp<=10 && gridColBkp>3 && gridColBkp<=10 && bombCount<b && bombCount>0){
+    gridColBkp = Number(gridCol);
+    let bombCount = gridRowBkp;
+    if(gridRowBkp>3 && gridRowBkp<=10 && gridColBkp>3 && gridColBkp<=10){
         let tmpGrid = [];
         let pos = 0;
         for (let x = 0; x < gridRow; x++) {
@@ -43,15 +41,15 @@ function initialiseGrid() {
 //Assigning boms randomly as per user input
 function assignBombRandomly(bombCount) {
     let randomeCell;
-    let prev = -1;
+    let forRandom = gridColBkp*2;
     for (let i = 0; i < bombCount; i++) {
-        randomeCell = Math.floor(Math.random() * (gridRowBkp * gridRowBkp));
-        if(prev === randomeCell)
-            i--;
-        else
+        randomeCell = Math.floor(Math.random() * forRandom);
+        if(myGrid[randomeCell].cellVal==="clear")
             myGrid[randomeCell].cellVal = "bomb";
+        else i--;
     }
     console.log(myGrid);
+    document.getElementById("infoP").innerText = `Number of bombs will be ${bombCount}`;
     updateDiv();
 }
 
@@ -78,7 +76,6 @@ let tmpAdj = [], nextPos;
 function cellClicked(e) {
     nextPos = [];
     let idInfo = e.target.id.toString().split("-");
-    console.log(myGrid[idInfo[2]]);
     if (myGrid[idInfo[2]].cellVal !== "bomb" && myGrid[idInfo[2]].cellClicked !== true) {
         document.getElementById(e.target.id).style.background = "green";
         myGrid[idInfo[2]].cellClicked = true;
@@ -98,7 +95,6 @@ function checkAdjCells(pos) {
     let cellXPos = myGrid[pos].cellXPos;
     let cellYPos = myGrid[pos].cellYPos;
     let tmpX, tmpY;
-    console.log(cellXPos + adj[0][0]);
     for (let i = 0; i < adj.length; i++) {
         tmpX = cellXPos + adj[i][0];
         tmpY = cellYPos + adj[i][1];

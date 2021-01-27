@@ -1,9 +1,14 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 .mainContainer{
     display: flex;
 }
 .gridBox{
     width: 575px;
-    height: 575px;
+    height: 1000px;
     background: aquamarine;
     display: flex;
     align-items: center;
