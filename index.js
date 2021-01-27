@@ -76,7 +76,7 @@ let tmpAdj = [], nextPos;
 function cellClicked(e) {
     nextPos = [];
     let idInfo = e.target.id.toString().split("-");
-    if (myGrid[idInfo[2]].cellVal !== "bomb" && myGrid[idInfo[2]].cellClicked !== true) {
+    if (myGrid[Number(idInfo[2])].cellVal !== "bomb" && myGrid[Number(idInfo[2])].cellClicked !== true) {
         document.getElementById(e.target.id).style.background = "rgb(153, 255, 204)";
         myGrid[idInfo[2]].cellClicked = true;
         checkAdjCells(idInfo[2]);
@@ -99,7 +99,7 @@ function checkAdjCells(pos) {
     for (let i = 0; i < adj.length; i++) {
         tmpX = cellXPos + adj[i][0];
         tmpY = cellYPos + adj[i][1];
-        if (tmpX < gridColBkp && tmpX >= 0 && tmpY < gridColBkp && tmpY >= 0)//Avoiding invalid cell check
+        if (tmpX < gridRowBkp && tmpX >= 0 && tmpY < gridColBkp && tmpY >= 0)//Avoiding invalid cell check
             tmpAdj.push([tmpX, tmpY]);
     }
     countTheBomb(tmpAdj, pos);
