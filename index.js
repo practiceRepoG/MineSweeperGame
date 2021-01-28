@@ -1,4 +1,4 @@
-//Each cell structure in grid
+//To maintain the state of cell
 class CellState {
     constructor(cellXPos, cellYPos, cellPos) {
         this.cellPos = cellPos;
@@ -9,31 +9,27 @@ class CellState {
         this.cellBmbCount = 0;
     }
 }
+//Warning on invalid row and coloumn input.
+let gameRules = `<h2>GAME RULES</h2><h4>*Grid rows and coloumn should be >3 and <=10</h4><br>`;
 
-let gameRules = `<h2>GAME RULES</h2>
-                 <h4>*Grid rows and coloumn should be >3 and <=10</h4><br>`;
-
-//Global var for refrence
+//Global variables for refrence
 let myGrid, gridRowBkp = 0, gridColBkp = 0;
 
-//Initialise grid with given rowsa and coloumn
+//Initialise grid with given rows and coloumn
 function initialiseGrid() {
-    let gridRow = document.getElementById("rowInput").value;
-    gridRowBkp = Number(gridRow);
-    let gridCol = document.getElementById("colInput").value;
-    gridColBkp = Number(gridCol);
+    gridRowBkp = Number(document.getElementById("rowInput").value);
+    gridColBkp = Number(document.getElementById("colInput").value);
     let bombCount = gridRowBkp;
-    if(gridRowBkp>3 && gridRowBkp<=10 && gridColBkp>3 && gridColBkp<=10){
-        let tmpGrid = [];
-        let pos = 0;
-        for (let x = 0; x < gridRow; x++) {
-            for (let y = 0; y < gridCol; y++) {
+    if (gridRowBkp > 3 && gridRowBkp <= 10 && gridColBkp > 3 && gridColBkp <= 10) {
+        let tmpGrid = []; pos = 0;
+        for (let x = 0; x < gridRowBkp; x++) {
+            for (let y = 0; y < gridColBkp; y++) {
                 tmpGrid.push(new CellState(x, y, pos));
                 pos++;
             }
         }
         myGrid = tmpGrid;
-        assignBombRandomly(bombCount)
+        assignBombRandomly(bombCount);
     }
     else document.getElementById("gridBox").innerHTML = gameRules;
 }
@@ -41,15 +37,15 @@ function initialiseGrid() {
 //Assigning boms randomly as per user input
 function assignBombRandomly(bombCount) {
     let randomeCell;
-    let forRandom = (gridColBkp*gridRowBkp)-1;
+    let forRandom = (gridColBkp * gridRowBkp) - 1;
     for (let i = 0; i < bombCount; i++) {
         randomeCell = Math.floor(Math.random() * forRandom);
-        if(myGrid[randomeCell].cellVal==="clear")
+        if (myGrid[randomeCell].cellVal === "clear")
             myGrid[randomeCell].cellVal = "bomb";
         else i--;
     }
     console.log(myGrid);
-    document.getElementById("infoP").innerText = `*Number of bombs will be ${bombCount}`;
+    document.getElementById("infoP").innerText = `*Total ${bombCount} bombs will be hidden`;
     updateDiv();
 }
 
@@ -62,8 +58,7 @@ function updateDiv() {
             str += `<th id="${i}-${myGrid[j].cellYPos}-${k}" style="height:50px;width:50px"></th>`;
             j++; k++;
         }
-        str += "</tr>";
-        i++; j = 0;
+        str += "</tr>"; i++; j = 0;
     }
     document.getElementById("gridBox").innerHTML = str;
 }
@@ -72,7 +67,7 @@ function updateDiv() {
 const adj = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];
 let tmpAdj = [], nextPos;
 
-//cell click event triggered
+//Cell click event triggered
 function cellClicked(e) {
     nextPos = [];
     let idInfo = e.target.id.toString().split("-");
@@ -87,7 +82,7 @@ function cellClicked(e) {
         document.getElementById("gridBox").style.backgroundSize = "cover";
         document.getElementById("startBtn").disabled = true;
     }
-    else if(myGrid[idInfo[2]].cellClicked === true){
+    else if (myGrid[idInfo[2]].cellClicked === true) {
         document.getElementById(`${myGrid[idInfo[2]].cellXPos}-${myGrid[idInfo[2]].cellYPos}-${idInfo[2]}`).style.background = "rgb(153, 255, 204)";
     }
     checkForWin();
@@ -144,18 +139,22 @@ function countTheBomb(tmpAdjs, pos) {
         }
     }
 }
-//On each click check for win
-function checkForWin(){
-    let leftOtBox=0;
-    for(let i=0; i<myGrid.length; i++){
-        if(myGrid[i].cellClicked === false)
+
+//Checking for win any any leftout cells
+function checkForWin() {
+    let leftOtBox = 0;
+    for (let i = 0; i < myGrid.length; i++) {
+        if (myGrid[i].cellClicked === false)
             leftOtBox++;
+        else if (myGrid[i].cellClicked === true) {
+            document.getElementById(`${myGrid[i].cellXPos}-${myGrid[i].cellYPos}-${i}`).style.background = "rgb(153, 255, 204)";
+        }
     }
-    if(leftOtBox === gridRowBkp){
+    if (leftOtBox === gridRowBkp) {
         document.getElementById("gridBox").innerHTML = "";
         document.getElementById("gridBox").style.backgroundImage = "url(win.png)";
         document.getElementById("gridBox").style.backgroundRepeat = "no-repeat";
-        document.getElementById("gridBox").style.backgroundSize = "800px";
+        document.getElementById("gridBox").style.backgroundSize = "600px";
         document.getElementById("gridBox").style.backgroundColor = "black";
         document.getElementById("startBtn").disabled = true;
     }
