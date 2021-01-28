@@ -44,7 +44,7 @@ function assignBombRandomly(bombCount) {
             myGrid[randomeCell].cellVal = "bomb";
         else i--;
     }
-    console.log(myGrid);
+    //console.log(myGrid); //Uncomment to see grid in console
     document.getElementById("infoP").innerText = `*Total ${bombCount} bombs will be hidden`;
     updateDiv();
 }
